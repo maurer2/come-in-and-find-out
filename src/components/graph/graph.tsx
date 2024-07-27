@@ -4,37 +4,27 @@ import {
   LineSeries,
   XYChart,
 } from '@visx/xychart';
+// import { scaleLinear } from '@visx/scale';
 
 type GraphProps = {
   width: number;
   height: number;
 }
 
-const data1 = [
-  { x: '2020-01-01', y: 50 },
-  { x: '2020-01-02', y: 10 },
-  { x: '2020-01-03', y: 20 },
-];
-
-const data2 = [
-  { x: '2020-01-01', y: 30 },
-  { x: '2020-01-02', y: 40 },
-  { x: '2020-01-03', y: 80 },
-];
+const data =
+  [...Array(1000).keys()].map((value) => ({ x: value, y: value }))
 
 const accessors = {
   xAccessor: (d) => d.x,
   yAccessor: (d) => d.y,
 };
 
-
 const Graph = ({ width, height }: GraphProps) => (
-  <XYChart width={width} height={height} xScale={{ type: 'band' }} yScale={{ type: 'linear' }}>
-    <Axis orientation="left" numTicks={10} />
-    <Axis orientation="bottom" numTicks={10} />
-    <Grid columns={false} numTicks={10} />
-    <LineSeries dataKey="Line 1" data={data1} {...accessors} />
-    <LineSeries dataKey="Line 2" data={data2} {...accessors} />
+  <XYChart width={width} height={height} xScale={{ type: 'linear', 'range': [0, 1000] }} yScale={{ type: 'linear', 'range': [0, 1000] }}>
+    <Axis orientation="left" numTicks={12} top={0} />
+    <Axis orientation="bottom" numTicks={12} />
+    <Grid columns={true} numTicks={50} />
+    <LineSeries dataKey="Line" data={data} {...accessors} />
   </XYChart>
 );
 
