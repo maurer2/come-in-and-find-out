@@ -25,6 +25,9 @@ const theme: XYChartTheme = buildChartTheme({
   tickLength: 15,
   gridColor: "white",
   gridColorDark: "black",
+  'svgLabelBig': {
+    fill: 'white'
+  }
 });
 
 const margin: Margin = {
@@ -73,7 +76,9 @@ const Graph = ({ width, height }: GraphProps) => {
           }}
           left={axisSizes}
           stroke="white"
-          strokeWidth={1}
+          strokeWidth={6}
+        // label="Mess around"
+        // labelOffset={0}
         />
         <Axis
           orientation="bottom"
@@ -88,14 +93,18 @@ const Graph = ({ width, height }: GraphProps) => {
             verticalAnchor: "end",
           }}
           stroke="white"
-          strokeWidth={1}
+          strokeWidth={6}
+        // label="Found out"
+        // labelOffset={0}
         />
         <Grid
           columns={true}
-          numTicks={1}
+          numTicks={11}
           left={axisSizes}
           top={-axisSizes + verticalTopSpacing}
         />
+      </Group>
+      <Group top={verticalTopSpacing} left={axisSizes}>
         <LineSeries
           dataKey="line"
           data={data}
@@ -109,6 +118,7 @@ const Graph = ({ width, height }: GraphProps) => {
               range: [smallestDataEntry.y, largestDataEntry.y],
             })(d.y)
           }
+          strokeWidth={6}
         />
       </Group>
     </XYChart>
