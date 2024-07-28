@@ -13,6 +13,7 @@ import { Group } from "@visx/group";
 type GraphProps = {
   width: number;
   height: number;
+  labelXAxis: string;
 };
 
 const data = [...Array(11).keys()].map((value) => ({ x: value, y: value }));
@@ -25,9 +26,9 @@ const theme: XYChartTheme = buildChartTheme({
   tickLength: 15,
   gridColor: "white",
   gridColorDark: "black",
-  'svgLabelBig': {
-    fill: 'white'
-  }
+  svgLabelBig: {
+    fill: "white",
+  },
 });
 
 const margin: Margin = {
@@ -41,9 +42,11 @@ const axisSizes = 40;
 const verticalTopSpacing = 10; // prevent top number getting cut off
 const horizontalRightSpacing = 8; // prevent top number getting cut off
 
-const Graph = ({ width, height }: GraphProps) => {
+const Graph = ({ width, height, labelXAxis }: GraphProps) => {
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
+
+  console.log(labelXAxis);
 
   return (
     <XYChart
@@ -77,7 +80,7 @@ const Graph = ({ width, height }: GraphProps) => {
           left={axisSizes}
           stroke="white"
           strokeWidth={6}
-        // label="Mess around"
+        // label="Find out"
         // labelOffset={0}
         />
         <Axis
@@ -94,7 +97,7 @@ const Graph = ({ width, height }: GraphProps) => {
           }}
           stroke="white"
           strokeWidth={6}
-        // label="Found out"
+        // label={labelXAxis}
         // labelOffset={0}
         />
         <Grid
