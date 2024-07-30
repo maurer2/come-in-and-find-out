@@ -32,6 +32,9 @@ importers:
       '@visx/shape':
         specifier: ^3.5.0
         version: 3.5.0(react@18.3.1)
+      '@visx/text':
+        specifier: ^3.3.0
+        version: 3.3.0(react@18.3.1)
       '@visx/visx':
         specifier: ^3.11.0
         version: 3.11.0(@react-spring/web@9.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)

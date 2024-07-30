@@ -9,11 +9,13 @@ import {
 } from "@visx/xychart";
 import { scaleLinear } from "@visx/scale";
 import { Group } from "@visx/group";
+import { Text, getStringWidth } from "@visx/text";
 
 type GraphProps = {
   width: number;
   height: number;
   labelXAxis: string;
+  labelYAxis: string;
 };
 
 const data = [...Array(11).keys()].map((value) => ({ x: value, y: value }));
@@ -40,13 +42,14 @@ const margin: Margin = {
 
 const axisSizes = 40;
 const verticalTopSpacing = 10; // prevent top number getting cut off
-const horizontalRightSpacing = 8; // prevent top number getting cut off
+const horizontalRightSpacing = 8; // prevent right number getting cut off
+const horizontalLeftSpacing = 20; // space between custom label and axis
 
-const Graph = ({ width, height, labelXAxis }: GraphProps) => {
-  const innerWidth = width - margin.left - margin.right;
+const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
+  const labelYWidth = getStringWidth(labelYAxis) ?? 0;
+
+  const innerWidth = width + -margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
-
-  console.log(labelXAxis);
 
   return (
     <XYChart
@@ -55,7 +58,9 @@ const Graph = ({ width, height, labelXAxis }: GraphProps) => {
       height={innerHeight}
       xScale={{
         type: "linear",
-        range: [0, innerWidth - axisSizes - horizontalRightSpacing],
+        // prettier-ignore
+        range: [0, innerWidth - axisSizes - horizontalRightSpacing - labelYWidth - horizontalLeftSpacing,
+        ],
         domain: [smallestDataEntry.x, largestDataEntry.x],
       }}
       yScale={{
@@ -65,7 +70,20 @@ const Graph = ({ width, height, labelXAxis }: GraphProps) => {
       }}
       theme={theme}
     >
-      <Group top={axisSizes} left={0}>
+      <Group top={axisSizes} left={labelYWidth + horizontalLeftSpacing}>
+        <Text
+          width={labelYWidth}
+          fontSize={40}
+          x={-labelYWidth - horizontalLeftSpacing}
+          y={"16%"}
+          fill="white"
+          height={529}
+          fontWeight={300}
+          verticalAnchor="start"
+          fontVariant="all-small-caps"
+        >
+          {labelYAxis}
+        </Text>
         <Axis
           orientation="left"
           numTicks={data.length}
@@ -80,8 +98,6 @@ const Graph = ({ width, height, labelXAxis }: GraphProps) => {
           left={axisSizes}
           stroke="white"
           strokeWidth={6}
-        // label="Find out"
-        // labelOffset={0}
         />
         <Axis
           orientation="bottom"
@@ -97,8 +113,6 @@ const Graph = ({ width, height, labelXAxis }: GraphProps) => {
           }}
           stroke="white"
           strokeWidth={6}
-        // label={labelXAxis}
-        // labelOffset={0}
         />
         <Grid
           columns={true}
@@ -107,7 +121,10 @@ const Graph = ({ width, height, labelXAxis }: GraphProps) => {
           top={-axisSizes + verticalTopSpacing}
         />
       </Group>
-      <Group top={verticalTopSpacing} left={axisSizes}>
+      <Group
+        top={verticalTopSpacing}
+        left={axisSizes + labelYWidth + horizontalLeftSpacing}
+      >
         <LineSeries
           dataKey="line"
           data={data}
