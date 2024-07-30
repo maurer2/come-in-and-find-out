@@ -4,7 +4,8 @@ import Graph from "./components/graph/graph";
 function App() {
   // todo responsive stuff
 
-  const label = useQueryParam("label") || "Mess around";
+  const labelXAxis = useQueryParam("label") || "Mess around";
+  const labelYAxis = "Find out";
 
   return (
     <main className="flex min-h-svh align-items">
@@ -12,10 +13,9 @@ function App() {
         <Graph
           width={800}
           height={600}
-          labelXAxis={label}
-          labelYAxis="Find out"
+          labelXAxis={labelXAxis}
+          labelYAxis={labelYAxis}
         />
-        {/* <figcaption className="mt-4 text-center text-white text-2xl">{label}</figcaption> */}
       </figure>
     </main>
   );

@@ -42,11 +42,13 @@ const margin: Margin = {
 
 const axisSizes = 40;
 const verticalTopSpacing = 10; // prevent top number getting cut off
+const verticalBottomSpacing = 20; // space between custom label and x-axis
 const horizontalRightSpacing = 8; // prevent right number getting cut off
-const horizontalLeftSpacing = 20; // space between custom label and axis
+const horizontalLeftSpacing = 20; // space between custom label and y-axis
 
 const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
   const labelYWidth = getStringWidth(labelYAxis) ?? 0;
+  const labelXWidth = getStringWidth(labelXAxis) ?? 0;
 
   const innerWidth = width + -margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
@@ -65,55 +67,71 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
       }}
       yScale={{
         type: "linear",
+        // prettier-ignore
         range: [0, innerHeight - axisSizes - verticalTopSpacing],
         domain: [largestDataEntry.y, smallestDataEntry.y],
       }}
       theme={theme}
     >
       <Group top={axisSizes} left={labelYWidth + horizontalLeftSpacing}>
-        <Text
-          width={labelYWidth}
-          fontSize={40}
-          x={-labelYWidth - horizontalLeftSpacing}
-          y={"16%"}
-          fill="white"
-          height={529}
-          fontWeight={300}
-          verticalAnchor="start"
-          fontVariant="all-small-caps"
-        >
-          {labelYAxis}
-        </Text>
-        <Axis
-          orientation="left"
-          numTicks={data.length}
-          top={-axisSizes + verticalTopSpacing}
-          tickLabelProps={{
-            fill: "white",
-            fontSize: 16,
-            dx: -8,
-            textAnchor: "end",
-            verticalAnchor: "end",
-          }}
-          left={axisSizes}
-          stroke="white"
-          strokeWidth={6}
-        />
-        <Axis
-          orientation="bottom"
-          numTicks={data.length}
-          top={innerHeight - axisSizes - axisSizes}
-          left={axisSizes}
-          tickLabelProps={{
-            fill: "white",
-            fontSize: 16,
-            dy: 8,
-            textAnchor: "middle",
-            verticalAnchor: "end",
-          }}
-          stroke="white"
-          strokeWidth={6}
-        />
+        <Group>
+          <Text
+            width={labelYWidth}
+            fontSize={40}
+            x={-labelYWidth - horizontalLeftSpacing}
+            y={"16%"}
+            fill="white"
+            fontWeight={300}
+            verticalAnchor="start"
+            fontVariant="all-small-caps"
+          >
+            {labelYAxis}
+          </Text>
+          <Axis
+            orientation="left"
+            numTicks={data.length}
+            top={-axisSizes + verticalTopSpacing}
+            tickLabelProps={{
+              fill: "white",
+              fontSize: 16,
+              dx: -8,
+              textAnchor: "end",
+              verticalAnchor: "end",
+            }}
+            left={axisSizes}
+            stroke="white"
+            strokeWidth={6}
+          />
+        </Group>
+        <Group>
+          <Text
+            fontSize={40}
+            x={(innerWidth - axisSizes) / 2 - axisSizes - labelXWidth / 2}
+            width={labelXWidth}
+            y={innerHeight - axisSizes - axisSizes + verticalBottomSpacing - 50}
+            fill="white"
+            fontWeight={300}
+            textAnchor="start"
+            fontVariant="all-small-caps"
+          >
+            {labelXAxis}
+          </Text>
+          <Axis
+            orientation="bottom"
+            numTicks={data.length}
+            top={innerHeight - axisSizes - axisSizes}
+            left={axisSizes}
+            tickLabelProps={{
+              fill: "white",
+              fontSize: 16,
+              dy: 8,
+              textAnchor: "middle",
+              verticalAnchor: "end",
+            }}
+            stroke="white"
+            strokeWidth={6}
+          />
+        </Group>
         <Grid
           columns={true}
           numTicks={11}
