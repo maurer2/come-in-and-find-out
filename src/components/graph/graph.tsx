@@ -184,12 +184,12 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
           data={data}
           xAccessor={(d) =>
             scaleLinear({
-              range: [smallestDataEntry.x, largestDataEntry.x],
+              range: domainX,
             })(d.x)
           }
           yAccessor={(d) =>
             scaleLinear({
-              range: [smallestDataEntry.y, largestDataEntry.y],
+              range: domainY.toReversed(), // todo: find out why reverse necessary
             })(d.y)
           }
           strokeWidth={strokeWidth}
