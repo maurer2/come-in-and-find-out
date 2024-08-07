@@ -23,14 +23,13 @@ const smallestDataEntry = data[0];
 const largestDataEntry = data[data.length - 1];
 
 const theme: XYChartTheme = buildChartTheme({
-  backgroundColor: "black",
-  colors: ["red"],
+  backgroundColor: "#64748b",
+  colors: ["green"],
   tickLength: 15,
   gridColor: "white",
   gridColorDark: "black",
-  svgLabelBig: {
-    fill: "white",
-  },
+  xAxisLineStyles: { stroke: "white" },
+  yAxisLineStyles: { stroke: "white" },
 });
 
 const axisWidthY = 40;
@@ -40,7 +39,7 @@ const verticalTopSpacing = 8; // prevent top number getting cut off
 const horizontalRightSpacing = 8; // prevent right number getting cut off
 const horizontalSpacingLabel = 20; // space between label and y-axis
 
-const strokeWidth = 5;
+const strokeWidth = 6;
 
 const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
   const labelYWidth = 71; // getStringWidth is slightly off
@@ -56,10 +55,20 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
-  const scaleFunction = scaleLinear<number>({
-    // prettier-ignore
-    range: [0, innerWidth - axisWidthY - labelYWidth - horizontalSpacingLabel - horizontalRightSpacing],
-    domain: [smallestDataEntry.x, largestDataEntry.x],
+  // prettier-ignore
+  const rangeX = [0, innerWidth - axisWidthY - labelYWidth - horizontalSpacingLabel - horizontalRightSpacing];
+  const domainX = [smallestDataEntry.x, largestDataEntry.x];
+  const rangeY = [0, innerHeight - axisHeightX - verticalTopSpacing];
+  const domainY = [largestDataEntry.y, smallestDataEntry.y];
+
+  const scaleFunctionX = scaleLinear<number>({
+    range: rangeX,
+    domain: domainX,
+  });
+
+  const scaleFunctionY = scaleLinear<number>({
+    range: rangeY,
+    domain: domainY,
   });
 
   return (
@@ -69,15 +78,13 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
       height={innerHeight}
       xScale={{
         type: "linear",
-        // prettier-ignore
-        range: [0, innerWidth - axisWidthY - labelYWidth - horizontalSpacingLabel - horizontalRightSpacing],
-        domain: [smallestDataEntry.x, largestDataEntry.x],
+        range: rangeX,
+        domain: domainX,
       }}
       yScale={{
         type: "linear",
-        // prettier-ignore
-        range: [0, innerHeight - axisHeightX - verticalTopSpacing],
-        domain: [largestDataEntry.y, smallestDataEntry.y],
+        range: rangeY,
+        domain: domainY,
       }}
       theme={theme}
       accessibilityLabel="Graph"
@@ -87,6 +94,7 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
           orientation="left"
           numTicks={data.length}
           top={verticalTopSpacing}
+          left={axisWidthY}
           tickLabelProps={{
             fill: "white",
             fontSize: 16,
@@ -94,15 +102,13 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
             textAnchor: "end",
             verticalAnchor: "end",
           }}
-          left={axisWidthY}
-          stroke="white"
-          strokeWidth={strokeWidth}
+          strokeWidth={strokeWidth} // size of ticks
         />
         <Text
           width={50}
           fontSize={40}
           x={-labelYWidth - horizontalSpacingLabel}
-          y={"16%"}
+          y={"13%"}
           fill="white"
           fontWeight={300}
           verticalAnchor="start"
@@ -115,8 +121,8 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
         <Axis
           orientation="bottom"
           numTicks={data.length}
-          left={axisWidthY}
           top={innerHeight - axisHeightX}
+          left={axisWidthY}
           tickLabelProps={{
             fill: "white",
             fontSize: 16,
@@ -124,8 +130,7 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
             textAnchor: "middle",
             verticalAnchor: "end",
           }}
-          stroke="white"
-          strokeWidth={strokeWidth}
+          strokeWidth={strokeWidth} // size of ticks
         />
         <Text
           fontSize={40}
@@ -143,33 +148,34 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
         </Text>
       </Group>
 
-      <Group
-        top={verticalTopSpacing - strokeWidth}
-        left={margin.left + axisWidthY + strokeWidth}
-      >
+      <Group top={verticalTopSpacing} left={margin.left + axisWidthY}>
+        {/* 8 horizontal */}
         <Line
-          from={{ x: 0, y: scaleFunction(2) }}
-          to={{ x: scaleFunction(8), y: scaleFunction(2) }}
-          stroke={"black"}
+          from={{ x: scaleFunctionX(0), y: scaleFunctionY(8) }}
+          to={{ x: scaleFunctionX(8), y: scaleFunctionY(8) }}
+          stroke={"white"}
           strokeWidth={strokeWidth}
         />
+        {/* 8 vertical */}
         <Line
-          from={{ x: scaleFunction(8), y: scaleFunction(10) }}
-          to={{ x: scaleFunction(8), y: scaleFunction(2) }}
-          stroke={"black"}
+          from={{ x: scaleFunctionX(8), y: scaleFunctionY(8) }}
+          to={{ x: scaleFunctionX(8), y: scaleFunctionY(0) }}
+          stroke={"white"}
           strokeWidth={strokeWidth}
         />
 
+        {/* 10 horizontal */}
         <Line
-          from={{ x: 0, y: scaleFunction(0) }}
-          to={{ x: scaleFunction(10), y: scaleFunction(0) }}
-          stroke={"black"}
+          from={{ x: scaleFunctionX(0), y: scaleFunctionY(10) }}
+          to={{ x: scaleFunctionX(10), y: scaleFunctionY(10) }}
+          stroke={"white"}
           strokeWidth={strokeWidth}
         />
+        {/* 10 vertical */}
         <Line
-          from={{ x: scaleFunction(10), y: scaleFunction(0) }}
-          to={{ x: scaleFunction(10), y: scaleFunction(10) }}
-          stroke={"black"}
+          from={{ x: scaleFunctionX(10), y: scaleFunctionY(10) }}
+          to={{ x: scaleFunctionX(10), y: scaleFunctionY(0) }}
+          stroke={"white"}
           strokeWidth={strokeWidth}
         />
 
