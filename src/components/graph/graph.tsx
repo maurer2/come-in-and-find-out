@@ -9,6 +9,7 @@ import {
 import { scaleLinear } from "@visx/scale";
 import { Group } from "@visx/group";
 import { Text, getStringWidth } from "@visx/text";
+import { Line } from "@visx/shape";
 
 type GraphProps = {
   width: number;
@@ -33,27 +34,33 @@ const theme: XYChartTheme = buildChartTheme({
 });
 
 const axisWidthY = 40;
-const axisHeightX = 120;
+const axisHeightX = 130;
 
 const verticalTopSpacing = 8; // prevent top number getting cut off
 const horizontalRightSpacing = 8; // prevent right number getting cut off
 const horizontalSpacingLabel = 20; // space between label and y-axis
 
-const margin: Margin = {
-  top: verticalTopSpacing,
-  right: horizontalRightSpacing,
-  bottom: axisHeightX,
-  left: axisWidthY + horizontalSpacingLabel,
-};
+const strokeWidth = 5;
 
 const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
-  const labelYWidth = 71;
+  const labelYWidth = 71; // getStringWidth is slightly off
   const labelXWidth = getStringWidth(labelXAxis) ?? 0;
 
-  console.log(labelYAxis, labelYWidth)
+  const margin: Margin = {
+    top: verticalTopSpacing,
+    right: horizontalRightSpacing,
+    bottom: axisHeightX,
+    left: horizontalSpacingLabel + labelYWidth,
+  };
 
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
+
+  const scaleFunction = scaleLinear<number>({
+    // prettier-ignore
+    range: [0, innerWidth - axisWidthY - labelYWidth - horizontalSpacingLabel - horizontalRightSpacing],
+    domain: [smallestDataEntry.x, largestDataEntry.x],
+  });
 
   return (
     <XYChart
@@ -63,8 +70,7 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
       xScale={{
         type: "linear",
         // prettier-ignore
-        range: [0, innerWidth - axisWidthY - labelYWidth - horizontalSpacingLabel - horizontalRightSpacing,
-        ],
+        range: [0, innerWidth - axisWidthY - labelYWidth - horizontalSpacingLabel - horizontalRightSpacing],
         domain: [smallestDataEntry.x, largestDataEntry.x],
       }}
       yScale={{
@@ -76,7 +82,7 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
       theme={theme}
       accessibilityLabel="Graph"
     >
-      <Group top={0} left={margin.left + horizontalSpacingLabel + 12}>
+      <Group top={0} left={margin.left}>
         <Axis
           orientation="left"
           numTicks={data.length}
@@ -90,7 +96,7 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
           }}
           left={axisWidthY}
           stroke="white"
-          strokeWidth={6}
+          strokeWidth={strokeWidth}
         />
         <Text
           width={50}
@@ -101,6 +107,7 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
           fontWeight={300}
           verticalAnchor="start"
           fontVariant="all-small-caps"
+          lineHeight="36"
         >
           {labelYAxis}
         </Text>
@@ -118,7 +125,7 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
             verticalAnchor: "end",
           }}
           stroke="white"
-          strokeWidth={6}
+          strokeWidth={strokeWidth}
         />
         <Text
           fontSize={40}
@@ -130,13 +137,42 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
           textAnchor="start"
           verticalAnchor="end"
           fontVariant="all-small-caps"
-          lineHeight="38"
+          lineHeight="36"
         >
           {labelXAxis}
         </Text>
       </Group>
 
-      <Group top={0} left={margin.left + axisWidthY + horizontalSpacingLabel + 18}>
+      <Group
+        top={verticalTopSpacing - strokeWidth}
+        left={margin.left + axisWidthY + strokeWidth}
+      >
+        <Line
+          from={{ x: 0, y: scaleFunction(2) }}
+          to={{ x: scaleFunction(8), y: scaleFunction(2) }}
+          stroke={"black"}
+          strokeWidth={strokeWidth}
+        />
+        <Line
+          from={{ x: scaleFunction(8), y: scaleFunction(10) }}
+          to={{ x: scaleFunction(8), y: scaleFunction(2) }}
+          stroke={"black"}
+          strokeWidth={strokeWidth}
+        />
+
+        <Line
+          from={{ x: 0, y: scaleFunction(0) }}
+          to={{ x: scaleFunction(10), y: scaleFunction(0) }}
+          stroke={"black"}
+          strokeWidth={strokeWidth}
+        />
+        <Line
+          from={{ x: scaleFunction(10), y: scaleFunction(0) }}
+          to={{ x: scaleFunction(10), y: scaleFunction(10) }}
+          stroke={"black"}
+          strokeWidth={strokeWidth}
+        />
+
         <LineSeries
           dataKey="line"
           data={data}
@@ -150,10 +186,10 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
               range: [smallestDataEntry.y, largestDataEntry.y],
             })(d.y)
           }
-          strokeWidth={6}
+          strokeWidth={strokeWidth}
         />
       </Group>
-    </XYChart >
+    </XYChart>
   );
 };
 
