@@ -1,11 +1,11 @@
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore } from 'react';
 
 export function useQueryParam(key: string): string | null {
   const subscribeToPopState = (listener: (event: PopStateEvent) => void) => {
-    window.addEventListener("popstate", listener);
+    window.addEventListener('popstate', listener);
 
     return () => {
-      window.removeEventListener("popstate", listener);
+      window.removeEventListener('popstate', listener);
     };
   };
 
@@ -15,10 +15,7 @@ export function useQueryParam(key: string): string | null {
     return queryParams.get(key);
   };
 
-  const valueOfQueryParam = useSyncExternalStore(
-    subscribeToPopState,
-    getCurrentValueOfQueryParam
-  );
+  const valueOfQueryParam = useSyncExternalStore(subscribeToPopState, getCurrentValueOfQueryParam);
 
   return valueOfQueryParam;
 }

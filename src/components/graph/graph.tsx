@@ -5,11 +5,11 @@ import {
   buildChartTheme,
   type Margin,
   type XYChartTheme,
-} from "@visx/xychart";
-import { scaleLinear } from "@visx/scale";
-import { Group } from "@visx/group";
-import { Text, getStringWidth } from "@visx/text";
-import { Line } from "@visx/shape";
+} from '@visx/xychart';
+import { scaleLinear } from '@visx/scale';
+import { Group } from '@visx/group';
+import { Text, getStringWidth } from '@visx/text';
+import { Line } from '@visx/shape';
 
 type GraphProps = {
   width: number;
@@ -23,13 +23,13 @@ const smallestDataEntry = data[0];
 const largestDataEntry = data[data.length - 1];
 
 const theme: XYChartTheme = buildChartTheme({
-  backgroundColor: "#64748b",
-  colors: ["green"],
+  backgroundColor: '#64748b',
+  colors: ['green'],
   tickLength: 15,
-  gridColor: "white",
-  gridColorDark: "black",
-  xAxisLineStyles: { stroke: "white" },
-  yAxisLineStyles: { stroke: "white" },
+  gridColor: 'white',
+  gridColorDark: 'black',
+  xAxisLineStyles: { stroke: 'white' },
+  yAxisLineStyles: { stroke: 'white' },
 });
 
 const axisWidthY = 40;
@@ -71,18 +71,20 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
     domain: domainY,
   });
 
+  console.log(labelXWidth);
+
   return (
     <XYChart
       margin={margin}
       width={innerWidth}
       height={innerHeight}
       xScale={{
-        type: "linear",
+        type: 'linear',
         range: rangeX,
         domain: domainX,
       }}
       yScale={{
-        type: "linear",
+        type: 'linear',
         range: rangeY,
         domain: domainY,
       }}
@@ -96,11 +98,11 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
           top={verticalTopSpacing}
           left={axisWidthY}
           tickLabelProps={{
-            fill: "white",
+            fill: 'white',
             fontSize: 16,
             dx: -8,
-            textAnchor: "end",
-            verticalAnchor: "end",
+            textAnchor: 'end',
+            verticalAnchor: 'end',
           }}
           strokeWidth={strokeWidth} // size of ticks
         />
@@ -108,12 +110,11 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
           width={50}
           fontSize={40}
           x={-labelYWidth - horizontalSpacingLabel}
-          y={"13%"}
+          y="13%"
           fill="white"
           fontWeight={300}
           verticalAnchor="start"
           fontVariant="all-small-caps"
-          lineHeight="36"
         >
           {labelYAxis}
         </Text>
@@ -124,11 +125,11 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
           top={innerHeight - axisHeightX}
           left={axisWidthY}
           tickLabelProps={{
-            fill: "white",
+            fill: 'white',
             fontSize: 16,
             dy: 8,
-            textAnchor: "middle",
-            verticalAnchor: "end",
+            textAnchor: 'middle',
+            verticalAnchor: 'end',
           }}
           strokeWidth={strokeWidth} // size of ticks
         />
@@ -136,13 +137,12 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
           fontSize={40}
           x={innerWidth - (innerWidth * 2) / 3}
           y={innerHeight - verticalTopSpacing}
-          width={labelXWidth}
+          width={96}
           fill="white"
           fontWeight={300}
           textAnchor="start"
           verticalAnchor="end"
           fontVariant="all-small-caps"
-          lineHeight="36"
         >
           {labelXAxis}
         </Text>
@@ -153,14 +153,14 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
         <Line
           from={{ x: scaleFunctionX(0), y: scaleFunctionY(8) }}
           to={{ x: scaleFunctionX(8), y: scaleFunctionY(8) }}
-          stroke={"white"}
+          stroke={'white'}
           strokeWidth={strokeWidth}
         />
         {/* 8 vertical */}
         <Line
           from={{ x: scaleFunctionX(8), y: scaleFunctionY(8) }}
           to={{ x: scaleFunctionX(8), y: scaleFunctionY(0) }}
-          stroke={"white"}
+          stroke={'white'}
           strokeWidth={strokeWidth}
         />
 
@@ -168,14 +168,14 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
         <Line
           from={{ x: scaleFunctionX(0), y: scaleFunctionY(10) }}
           to={{ x: scaleFunctionX(10), y: scaleFunctionY(10) }}
-          stroke={"white"}
+          stroke={'white'}
           strokeWidth={strokeWidth}
         />
         {/* 10 vertical */}
         <Line
           from={{ x: scaleFunctionX(10), y: scaleFunctionY(10) }}
           to={{ x: scaleFunctionX(10), y: scaleFunctionY(0) }}
-          stroke={"white"}
+          stroke={'white'}
           strokeWidth={strokeWidth}
         />
 
