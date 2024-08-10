@@ -7,4 +7,5 @@ export default defineConfig({
   build: {
     target: 'esnext',
   },
+  base: '/come-in-and-find-out/',
 });
