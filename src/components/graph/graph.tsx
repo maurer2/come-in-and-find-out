@@ -10,6 +10,8 @@ import { scaleLinear } from '@visx/scale';
 import { Group } from '@visx/group';
 import { Text, getStringWidth } from '@visx/text';
 import { Line } from '@visx/shape';
+import resolveConfig from 'tailwindcss/resolveConfig';
+import tailwindConfig from '../../../tailwind.config';
 
 type GraphProps = {
   width: number;
@@ -22,14 +24,15 @@ const data = [...Array(11).keys()].map((value) => ({ x: value, y: value }));
 const smallestDataEntry = data[0];
 const largestDataEntry = data[data.length - 1];
 
+const tailwindConfigResolved = resolveConfig(tailwindConfig);
 const theme: XYChartTheme = buildChartTheme({
-  backgroundColor: '#64748b',
-  colors: ['red'],
+  backgroundColor: tailwindConfigResolved.theme.colors.slate[500], // not page background
+  colors: [tailwindConfigResolved.theme.colors.red[500]],
   tickLength: 15,
-  gridColor: 'white',
-  gridColorDark: 'black',
-  xAxisLineStyles: { stroke: 'white' },
-  yAxisLineStyles: { stroke: 'white' },
+  gridColor: tailwindConfigResolved.theme.colors.white,
+  gridColorDark: tailwindConfigResolved.theme.colors.black,
+  xAxisLineStyles: { stroke: tailwindConfigResolved.theme.colors.white },
+  yAxisLineStyles: { stroke: tailwindConfigResolved.theme.colors.white },
 });
 
 const axisWidthY = 40;
