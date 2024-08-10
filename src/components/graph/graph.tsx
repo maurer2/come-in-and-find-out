@@ -24,7 +24,7 @@ const largestDataEntry = data[data.length - 1];
 
 const theme: XYChartTheme = buildChartTheme({
   backgroundColor: '#64748b',
-  colors: ['green'],
+  colors: ['red'],
   tickLength: 15,
   gridColor: 'white',
   gridColorDark: 'black',
@@ -65,13 +65,10 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
     range: rangeX,
     domain: domainX,
   });
-
   const scaleFunctionY = scaleLinear<number>({
     range: rangeY,
     domain: domainY,
   });
-
-  console.log(labelXWidth);
 
   return (
     <XYChart
@@ -92,92 +89,104 @@ const Graph = ({ width, height, labelXAxis, labelYAxis }: GraphProps) => {
       accessibilityLabel="Graph"
     >
       <Group top={0} left={margin.left}>
-        <Axis
-          orientation="left"
-          numTicks={data.length}
-          top={verticalTopSpacing}
-          left={axisWidthY}
-          tickLabelProps={{
-            fill: 'white',
-            fontSize: 16,
-            dx: -8,
-            textAnchor: 'end',
-            verticalAnchor: 'end',
-          }}
-          strokeWidth={strokeWidth} // size of ticks
-        />
-        <Text
-          width={50}
-          fontSize={40}
-          x={-labelYWidth - horizontalSpacingLabel}
-          y="13%"
-          fill="white"
-          fontWeight={300}
-          verticalAnchor="start"
-          fontVariant="all-small-caps"
-        >
-          {labelYAxis}
-        </Text>
+        {/* left axis with label */}
+        <Group>
+          <Axis
+            orientation="left"
+            numTicks={data.length}
+            top={verticalTopSpacing}
+            left={axisWidthY}
+            tickLabelProps={{
+              fill: 'white',
+              fontSize: 16,
+              dx: -8,
+              textAnchor: 'end',
+              verticalAnchor: 'end',
+            }}
+            strokeWidth={strokeWidth} // size of ticks
+          />
+          <Text
+            width={50}
+            fontSize={40}
+            x={-labelYWidth - horizontalSpacingLabel}
+            y="13%"
+            fill="white"
+            fontWeight={300}
+            verticalAnchor="start"
+            fontVariant="all-small-caps"
+          >
+            {labelYAxis}
+          </Text>
+        </Group>
 
-        <Axis
-          orientation="bottom"
-          numTicks={data.length}
-          top={innerHeight - axisHeightX}
-          left={axisWidthY}
-          tickLabelProps={{
-            fill: 'white',
-            fontSize: 16,
-            dy: 8,
-            textAnchor: 'middle',
-            verticalAnchor: 'end',
-          }}
-          strokeWidth={strokeWidth} // size of ticks
-        />
-        <Text
-          fontSize={40}
-          x={innerWidth - (innerWidth * 2) / 3}
-          y={innerHeight - verticalTopSpacing}
-          width={96}
-          fill="white"
-          fontWeight={300}
-          textAnchor="start"
-          verticalAnchor="end"
-          fontVariant="all-small-caps"
-        >
-          {labelXAxis}
-        </Text>
+        {/* bottom axis with label */}
+        <Group>
+          <Axis
+            orientation="bottom"
+            numTicks={data.length}
+            top={innerHeight - axisHeightX}
+            left={axisWidthY}
+            tickLabelProps={{
+              fill: 'white',
+              fontSize: 16,
+              dy: 8,
+              textAnchor: 'middle',
+              verticalAnchor: 'end',
+            }}
+            strokeWidth={strokeWidth} // size of ticks
+          />
+          <Text
+            width={labelXWidth - 10}
+            fontSize={40}
+            x={innerWidth - (innerWidth * 2) / 3}
+            y={innerHeight - verticalTopSpacing}
+            fill="white"
+            fontWeight={300}
+            textAnchor="start"
+            verticalAnchor="end"
+            fontVariant="all-small-caps"
+          >
+            {labelXAxis}
+          </Text>
+        </Group>
       </Group>
 
       <Group top={verticalTopSpacing} left={margin.left + axisWidthY}>
-        {/* 8 horizontal */}
-        <Line
-          from={{ x: scaleFunctionX(0), y: scaleFunctionY(8) }}
-          to={{ x: scaleFunctionX(8), y: scaleFunctionY(8) }}
-          stroke={'white'}
-          strokeWidth={strokeWidth}
-        />
-        {/* 8 vertical */}
-        <Line
-          from={{ x: scaleFunctionX(8), y: scaleFunctionY(8) }}
-          to={{ x: scaleFunctionX(8), y: scaleFunctionY(0) }}
-          stroke={'white'}
-          strokeWidth={strokeWidth}
-        />
+        {/* lines at number 8 */}
+        <Group>
+          {/* horizontal */}
+          <Line
+            from={{ x: scaleFunctionX(0), y: scaleFunctionY(8) }}
+            to={{ x: scaleFunctionX(8), y: scaleFunctionY(8) }}
+            stroke={'white'}
+            strokeWidth={strokeWidth}
+          />
+          {/* vertical */}
+          <Line
+            from={{ x: scaleFunctionX(8), y: scaleFunctionY(8) }}
+            to={{ x: scaleFunctionX(8), y: scaleFunctionY(0) }}
+            stroke={'white'}
+            strokeWidth={strokeWidth}
+          />
+        </Group>
 
-        {/* 10 horizontal */}
-        <Line
-          from={{ x: scaleFunctionX(0), y: scaleFunctionY(10) }}
-          to={{ x: scaleFunctionX(10), y: scaleFunctionY(10) }}
-          stroke={'white'}
-          strokeWidth={strokeWidth}
-        />
-        {/* 10 vertical */}
-        <Line
-          from={{ x: scaleFunctionX(10), y: scaleFunctionY(10) }}
-          to={{ x: scaleFunctionX(10), y: scaleFunctionY(0) }}
-          stroke={'white'}
-          strokeWidth={strokeWidth}
-        />
+        {/* lines at number 10 */}
+        <Group>
+          {/* horizontal */}
+          <Line
+            from={{ x: scaleFunctionX(0), y: scaleFunctionY(10) }}
+            to={{ x: scaleFunctionX(10), y: scaleFunctionY(10) }}
+            stroke={'white'}
+            strokeWidth={strokeWidth}
+          />
+          {/* vertical */}
+          <Line
+            from={{ x: scaleFunctionX(10), y: scaleFunctionY(10) }}
+            to={{ x: scaleFunctionX(10), y: scaleFunctionY(0) }}
+            stroke={'white'}
+            strokeWidth={strokeWidth}
+          />
+        </Group>
 
         <LineSeries
           dataKey="line"
